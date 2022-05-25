@@ -26,7 +26,6 @@ public class Client implements Runnable{
             }
             
         } catch (Exception e) {
-            //TODO: handle exception
             desligar();
         }
     }
@@ -40,7 +39,7 @@ public class Client implements Runnable{
                 client.close();
             }
         } catch (Exception e) {
-            //TODO: handle exception
+            //ignorar
         }
     }
 
