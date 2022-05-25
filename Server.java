@@ -67,9 +67,11 @@ public class Server implements Runnable{
         private BufferedReader in;
         private PrintWriter out;
         private String nickname;
+        private int port;
 
         public Conectador(Socket client){
             this.client = client;
+            this.port = client.getPort();
         }
 
         @Override
@@ -80,7 +82,7 @@ public class Server implements Runnable{
                 out.println("Teu nome: ");
                 nickname = in.readLine();
                 
-                System.out.println(nickname + " entrou!");
+                System.out.println(port + " entrou!");
                 broadcast(nickname + " se juntou ao chat!");
                 String mensagem;
                 while ((mensagem = in.readLine()) != null){
@@ -95,7 +97,7 @@ public class Server implements Runnable{
                             out.println("Nenhum nome foi dado.");
                         }
                     }else if(mensagem.startsWith("/sair")){
-                        broadcast(nickname + "saiu.");
+                        broadcast(nickname + " saiu.");
                         desligar();
                     }else{
                         broadcast(nickname + ": " + mensagem);
