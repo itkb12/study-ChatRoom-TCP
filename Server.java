@@ -24,8 +24,7 @@ public class Server implements Runnable{
     public void run(){
         
         try {
-            int port = 1234;
-            server = new ServerSocket(port);
+            server = new ServerSocket(1234);
             pool = Executors.newCachedThreadPool();
             while(!terminado){
                 Socket client = server.accept();
@@ -34,7 +33,7 @@ public class Server implements Runnable{
                 pool.execute(handler);
             }
             
-        } catch (IOException e) {
+        } catch (Exception e) {
             desligar();
         }
     }
@@ -50,6 +49,7 @@ public class Server implements Runnable{
     public void desligar(){
         try{
             terminado = true;
+            pool.shutdown();
             if(!server.isClosed()){
                 server.close();
             }
@@ -79,10 +79,11 @@ public class Server implements Runnable{
                 in = new BufferedReader(new InputStreamReader(client.getInputStream()));
                 out.println("Teu nome: ");
                 nickname = in.readLine();
+                
                 System.out.println(nickname + " entrou!");
-                broadcast(nickname + "se juntou ao chat!");
-                String mensagem = in.readLine();
-                while (mensagem != null){
+                broadcast(nickname + " se juntou ao chat!");
+                String mensagem;
+                while ((mensagem = in.readLine()) != null){
                     if(mensagem.startsWith("/nick")){
                         String[] separarMensagem = mensagem.split(" ", 2);
                         if(separarMensagem.length == 2){
@@ -100,7 +101,7 @@ public class Server implements Runnable{
                         broadcast(nickname + ": " + mensagem);
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 desligar();
             }
         }
